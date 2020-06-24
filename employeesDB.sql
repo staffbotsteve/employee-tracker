@@ -40,7 +40,7 @@ VALUES ("Operations");
 
 -- DELETE FROM department WHERE id = 1 ; 
 -- SELECT * FROM department; 
-SELECT * FROM role;
+-- SELECT * FROM role;
 
 
 INSERT INTO role (title, salary)
