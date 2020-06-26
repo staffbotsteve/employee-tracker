@@ -1,22 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require('inquirer');
 
-// this is what i will use for the prompts
-// inquirer
-//   .prompt([
-//     /* Pass your questions in here */
-//   ])
-//   .then(answers => {
-//     // Use user feedback for... whatever!!
-//   })
-//   .catch(error => {
-//     if(error.isTtyError) {
-//       // Prompt couldn't be rendered in the current environment
-//     } else {
-//       // Something else when wrong
-//     }
-//   });
-
 var connection = mysql.createConnection({
   host: "localhost",
 
@@ -31,26 +15,64 @@ var connection = mysql.createConnection({
   database: "employeesDB"
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId + "\n");
-  // createEmployee();
+  employeeMenu();
 });
 
-function createEmployee() {
-    console.log("Inserting a new employee...\n");
-    var query = connection.query(
-      "INSERT INTO employee SET ?" + 
-      {
-        first_name: "PROMPT",
-        last_name:  "PROMPT",
-        role_id:  "PROMPT",
-        manager_id:  "PROMPT"
-      },
-      function(err, res) {
-        if (err) throw err;
-        console.log(res.affectedRows + " product inserted!\n");
-        // Call updateEmployee AFTER the INSERT completes
-        // updateEmployee();
+function employeeMenu() {
+  inquirer
+    .prompt({
+      name: "action",
+      type: "rawlist",
+      message: "What would you like to do?",
+      choices: [
+        "Add departments, roles, employees",
+        "View departments, roles, employees",
+        "Update employee roles"]
+    })
+    .then(function (answer) {
+      switch (answer.action) {
+        case "Add departments, roles, employees":
+          addEmployee();
+          break;
+
+        case "View departments, roles, employees":
+          viewEmployee();
+          break;
+
+        case "Update employee roles":
+          updateEmployeeRole();
+          break;
       }
-    )};
+    });
+}
+
+function addEmployee() {
+  inquirer
+    .prompt(
+      {
+        name: "employeeName",
+        type: "input",
+        message: "Enter the employee's name",
+      },
+      {
+        name: "employeeDepartment",
+        type: "input",
+        message: "Enter the employee's department",
+      },
+      {
+        name: "employeeRole",
+        type: "input",
+        message: "Enter the employee's role",
+      }
+    )
+    .then(function (answer) {
+      // based on their answer
+      connection.query("INSERT INTO employee VALUES ?, ?, ?", [answer.employeeName, answer.employeeDepartment, answer.employeeRole], function (err, results) {
+        if (err) throw err;
+        console.log('Employee added')
+      })
+    });
+}

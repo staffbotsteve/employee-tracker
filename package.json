@@ -1,7 +1,7 @@
 {
   "name": "employee-tracker",
   "version": "1.0.0",
-  "description": "",
+  "description": "employee sql homework",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/staffbotsteve/employee-tracker.git"
   },
-  "author": "",
+  "author": "steven swan",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/staffbotsteve/employee-tracker/issues"
