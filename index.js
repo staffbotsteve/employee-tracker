@@ -51,26 +51,39 @@ function employeeMenu() {
 
 function addEmployee() {
   inquirer
-    .prompt(
+    .prompt([
       {
-        name: "employeeName",
+        name: "employeeFirstName",
         type: "input",
-        message: "Enter the employee's name",
+        message: "Enter the employee's first name",
       },
       {
-        name: "employeeDepartment",
+        name: "employeeLastName",
         type: "input",
-        message: "Enter the employee's department",
+        message: "Enter the employee's last name",
       },
       {
         name: "employeeRole",
         type: "input",
-        message: "Enter the employee's role",
+        message: "Enter the employee's role id",
+      },
+      {
+        name: "employeeDepartment",
+        type: "input",
+        message: "Enter the employee's department number",
       }
-    )
+
+    ])
     .then(function (answer) {
       // based on their answer
-      connection.query("INSERT INTO employee VALUES ?, ?, ?", [answer.employeeName, answer.employeeDepartment, answer.employeeRole], function (err, results) {
+      connection.query("INSERT INTO employee SET ?",
+
+      [{
+        first_name: answer.employeeFirstName, last_name: answer.employeeLastName, role_id: Number(answer.employeeRole),
+        department_id: Number(answer.employeeRole)
+      }],
+      
+      function (err, results) {
         if (err) throw err;
         console.log('Employee added')
       })
