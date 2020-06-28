@@ -87,7 +87,8 @@ function addDepartment() {
         function (err, results) {
           if (err) throw err;
           console.log('Department added')
-        })
+        });
+        employeeMenu();
     });
 }
 
@@ -115,6 +116,7 @@ function addRole() {
           if (err) throw err;
           console.log('Role added')
         })
+        employeeMenu();
     });
 }
 
@@ -160,5 +162,6 @@ function addEmployee() {
           if (err) throw err;
           console.log('Employee added')
         })
+        employeeMenu();
     });
 }
