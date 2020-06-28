@@ -10,14 +10,14 @@ CREATE TABLE employee (
   last_name	VARCHAR(30)	NULL,
   role_id INT NULL,
   manager_id INT NULL,
---   INDEX department_ind (department_id),
+  INDEX department_ind (department_id),
   INDEX role_ind (role_id),
   INDEX man_ind (manager_id),
---   CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE,
+  CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE,
   CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE,
   CONSTRAINT fk_manager FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE CASCADE
 );
-
+ 
 CREATE TABLE department (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name	VARCHAR(30)	NULL

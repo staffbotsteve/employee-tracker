@@ -28,18 +28,38 @@ function employeeMenu() {
       type: "rawlist",
       message: "What would you like to do?",
       choices: [
-        "Add departments, roles, employees",
-        "View departments, roles, employees",
+        "Add departments",
+        "Add roles",
+        "Add employees",
+        "View departments",
+        "View roles",
+        "View employees",
         "Update employee roles"]
     })
     .then(function (answer) {
       switch (answer.action) {
-        case "Add departments, roles, employees":
+        case "Add departments":
+          addDepartment();
+          break;
+
+        case "Add roles":
+          addRole();
+          break;
+
+        case "Add employees":
           addEmployee();
           break;
 
-        case "View departments, roles, employees":
-          viewEmployee();
+        case "View departments":
+          viewDepartments();
+          break;
+
+        case "View roles":
+          viewDepartments();
+          break;
+
+        case "View employees":
+          viewDepartments();
           break;
 
         case "Update employee roles":
@@ -48,6 +68,57 @@ function employeeMenu() {
       }
     });
 }
+
+function addDepartment() {
+  inquirer
+    .prompt([
+      {
+        name: "departmentName",
+        type: "input",
+        message: "Enter the department name",
+      }
+    ])
+    .then(function (answer) {
+      // based on their answer
+      connection.query("INSERT INTO department SET ?",
+        [{
+          name: answer.departmentName
+        }],
+        function (err, results) {
+          if (err) throw err;
+          console.log('Department added')
+        })
+    });
+}
+
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        name: "roleTitle",
+        type: "input",
+        message: "Enter the role title",
+      },
+      {
+        name: "roleSalary",
+        type: "input",
+        message: "Enter the role's salary",
+      }
+    ])
+    .then(function (answer) {
+      // based on their answer
+      connection.query("INSERT INTO role SET ?",
+        [{
+          title: answer.roleTitle, salary: answer.roleSalary
+        }],
+        function (err, results) {
+          if (err) throw err;
+          console.log('Role added')
+        })
+    });
+}
+
+
 
 function addEmployee() {
   inquirer
@@ -69,23 +140,25 @@ function addEmployee() {
       },
       {
         name: "employeeDepartment",
-        type: "input",
+        type: "list",
         message: "Enter the employee's department number",
+        choices: [1, 2, 3]
       }
-
+      // use choices for department id and for manager id
+      // reverse for looking up managers nd departments (select * from managers)
+      // populate the array
+      // then take that value and use in a function that looks upthe id's in each of those tables
     ])
     .then(function (answer) {
       // based on their answer
       connection.query("INSERT INTO employee SET ?",
 
-      [{
-        first_name: answer.employeeFirstName, last_name: answer.employeeLastName, role_id: Number(answer.employeeRole),
-        department_id: Number(answer.employeeRole)
-      }],
-      
-      function (err, results) {
-        if (err) throw err;
-        console.log('Employee added')
-      })
+        [{
+          first_name: answer.employeeFirstName, last_name: answer.employeeLastName, role_id: Number(answer.employeeRole), department_id: Number(answer.employeeDepartment)
+        }],
+        function (err, results) {
+          if (err) throw err;
+          console.log('Employee added')
+        })
     });
 }
