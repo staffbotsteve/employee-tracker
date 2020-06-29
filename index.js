@@ -1,5 +1,6 @@
-var mysql = require("mysql");
-var inquirer = require('inquirer');
+const mysql = require("mysql");
+const inquirer = require('inquirer');
+const cTable = require('console.table');
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -55,11 +56,11 @@ function employeeMenu() {
           break;
 
         case "View roles":
-          viewDepartments();
+          viewRoles();
           break;
 
         case "View employees":
-          viewDepartments();
+          viewEmployees();
           break;
 
         case "Update employee roles":
@@ -88,7 +89,7 @@ function addDepartment() {
           if (err) throw err;
           console.log('Department added')
         });
-        employeeMenu();
+      employeeMenu();
     });
 }
 
@@ -116,11 +117,9 @@ function addRole() {
           if (err) throw err;
           console.log('Role added')
         })
-        employeeMenu();
+      employeeMenu();
     });
 }
-
-
 
 function addEmployee() {
   inquirer
@@ -162,6 +161,30 @@ function addEmployee() {
           if (err) throw err;
           console.log('Employee added')
         })
-        employeeMenu();
+      employeeMenu();
     });
 }
+
+function viewEmployees() {
+  connection.query("SELECT * FROM employee",
+    function (err, results) {
+      if (err) throw err;
+      let newResults = [];
+      results.map(function (result) {
+        newResults.push(
+          {
+            "ID": result.id,
+            "First Name": result.first_name,
+            "Last Name": result.last_name
+          })
+      });
+      console.table(newResults)
+      employeeMenu();
+    }
+  )}
+
+// "View departments",
+// "View roles",
+// "View employees",
+// "Update employee roles"]
+
