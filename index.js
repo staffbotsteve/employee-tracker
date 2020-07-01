@@ -186,5 +186,71 @@ function viewEmployees() {
 // "View departments",
 // "View roles",
 // "View employees",
-// "Update employee roles"]
+// "Update employee roles"
 
+// change from map code
+function viewDepartments() {
+  connection.query("SELECT * FROM department", function (err, results) {
+    if (err) throw err;
+    results.forEach(department => console.table(department))
+    employeeMenu();
+  }
+  )
+}
+function viewRoles() {
+  connection.query("SELECT * FROM role", function (err, results) {
+    if (err) throw err;
+    results.forEach(role => console.table(role))
+    employeeMenu();
+  }
+  )
+}
+// function viewEmployees() {
+//   connection.query("SELECT * FROM employee", function (err, results) {
+//     if (err) throw err;
+//     results.forEach(employee => console.table(employee))
+//     // results.map(function (result) {
+//     //   newResults.push(
+//     //     {
+//     //       "ID": result.id,
+//     //       "First Name": result.first_name,
+//     //       "Last Name": result.last_name
+//     //     })
+//     // });
+//     // console.table(newResults)
+//     employeeMenu();
+//   }
+//   )
+// }
+
+function updateEmployeeRole() {
+  connection.query("SELECT concat (id, ' ', first_name, ' ',last_name) AS name FROM employee; SELECT title FROM roles", function(err, result){
+    if(err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: "employeeName",
+          type: "rawlist",
+          message: "Which employee's role would you like to update?",
+          choices: function () {
+              let choiceArray = results[0].map(choice => choice.name);
+              return choiceArray;
+          }
+        },
+        {
+          name: "employeeRole",
+          type: "list",
+          message: "What is the employee's new role?",
+          choices: function () {
+              let choiceArray = results[1].map(choice => choice.title);
+              return choiceArray;
+          }
+        }
+      ]).then((answer) => {
+          connection.query("UPDATE employee SET role_id = ? WHERE id = ?;", function (err, results) {
+          if (err) throw err;
+          console.log("Role Changed!");
+      })
+  })
+}
+)};
