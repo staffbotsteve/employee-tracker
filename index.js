@@ -35,7 +35,10 @@ function employeeMenu() {
         "View departments",
         "View roles",
         "View employees",
-        "Update employee roles"]
+        "Update employee roles",
+        "Delete departments",
+        "Delete roles",
+        "Delete employees",]
     })
     .then(function (answer) {
       switch (answer.action) {
@@ -66,6 +69,19 @@ function employeeMenu() {
         case "Update employee roles":
           updateEmployeeRole();
           break;
+
+        case "Delete departments":
+          deleteDepartment();
+          break;
+
+        case "Delete roles":
+          deleteRole();
+          break;
+
+        case "Delete employee":
+          deleteEmployee();
+          break;
+
       }
     });
 }
@@ -181,7 +197,8 @@ function viewEmployees() {
       console.table(newResults)
       employeeMenu();
     }
-  )}
+  )
+}
 
 // "View departments",
 // "View roles",
@@ -224,8 +241,8 @@ function viewRoles() {
 // }
 
 function updateEmployeeRole() {
-  connection.query("SELECT concat (id, ' ', first_name, ' ',last_name) AS name FROM employee; SELECT title FROM roles", function(err, result){
-    if(err) throw err;
+  connection.query("SELECT concat (id, ' ', first_name, ' ',last_name) AS name FROM employee; SELECT title FROM roles", function (err, result) {
+    if (err) throw err;
     inquirer
       .prompt([
         {
@@ -233,8 +250,8 @@ function updateEmployeeRole() {
           type: "rawlist",
           message: "Which employee's role would you like to update?",
           choices: function () {
-              let choiceArray = results[0].map(choice => choice.name);
-              return choiceArray;
+            let choiceArray = results[0].map(choice => choice.name);
+            return choiceArray;
           }
         },
         {
@@ -242,15 +259,57 @@ function updateEmployeeRole() {
           type: "list",
           message: "What is the employee's new role?",
           choices: function () {
-              let choiceArray = results[1].map(choice => choice.title);
-              return choiceArray;
+            let choiceArray = results[1].map(choice => choice.title);
+            return choiceArray;
           }
         }
       ]).then((answer) => {
-          connection.query("UPDATE employee SET role_id = ? WHERE id = ?;", function (err, results) {
+        connection.query("UPDATE employee SET role_id = ? WHERE id = ?;", function (err, results) {
           if (err) throw err;
           console.log("Role Changed!");
+        })
       })
-  })
-}
-)};
+  }
+  )
+};
+
+// DELETE FUNCTIONS (NEED TO UPDATE CODE)
+function deleteDepartment() {
+
+  CREATE TABLE department (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name	VARCHAR(30)	NULL
+  );
+  
+
+  connection.query("SELECT concat (id, ' ', name) AS name FROM employee; SELECT name FROM departments", function (err, result) {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: "employeeName",
+          type: "rawlist",
+          message: "Which employee's role would you like to update?",
+          choices: function () {
+            let choiceArray = results[0].map(choice => choice.name);
+            return choiceArray;
+          }
+        },
+        {
+          name: "employeeRole",
+          type: "list",
+          message: "What is the employee's new role?",
+          choices: function () {
+            let choiceArray = results[1].map(choice => choice.title);
+            return choiceArray;
+          }
+        }
+      ]).then((answer) => {
+        connection.query("UPDATE employee SET role_id = ? WHERE id = ?;", function (err, results) {
+          if (err) throw err;
+          console.log("Role Changed!");
+        })
+      })
+  }
+  )
+};
